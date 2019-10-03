@@ -1,2 +1,174 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><style>body{margin:0}#hero_page{background-image:url(green_background.png);background-size:cover;background-attachment:fixed;height:100vh;width:100%}</style><title>Bubbles</title></head><body><div id="hero_page"> <canvas id="the_canvas" style="z-index: 4"></canvas></div> <script>    const canvas1=function(){const t=document.getElementById("the_canvas"),h=t.getContext("2d");function i(t,h){return Math.random()*(h-t)+t}function a(){let t=Math.round(3*Math.random()+1);return 1==t?"#ffffe6":2==t?"#ffffcc":3==t?"#ffffb3":4==t?"white":void 0}t.style.width="100%",t.style.height="100vh",t.width=t.offsetWidth,t.height=t.offsetHeight,t.style.background="";let s,d=[],o=function(i,a,s,d,o,e,n,r){this.x=i,this.y=a,this.dx=s,this.dy=d,this.color=o,this.dOpacity=n,this.opacity=e,this.radius=r,this.draw=function(){h.globalAlpha=this.opacity,h.shadowColor=this.color,h.shadowBlur=30,h.beginPath(),h.arc(this.x,this.y,this.radius,0,2*Math.PI,!1),h.fillStyle=this.color,h.fill()},this.update=function(){this.x+=this.dx,this.y+=this.dy,this.opacity+=this.dOpacity,this.x-this.radius>t.width&&(this.x=0-this.radius),this.x+this.radius<0&&(this.x=t.width+this.radius),this.y-this.radius>t.height&&(this.y=0-this.radius),this.opacity>=.6&&(this.dOpacity=-this.dOpacity),this.opacity<=.2&&(this.dOpacity=.001),this.draw()}};function e(){t.style.width="100%",t.style.height="100vh",t.width=t.offsetWidth,t.height=t.offsetHeight;for(let h=0;h<t.width/70;h++){let h=Math.round(Math.random()*(t.width-30)+30),s=Math.round(Math.random()*(t.height-10)+10),e=.1*Math.random()-.05,n=.1*Math.random()+.1,r=i(.2,.6),u=.001,c=a(),f=Math.round(30*Math.random()+20);d.push(new o(h,s,e,n,c,r,u,f))}}window.addEventListener("resize",function(){d.length=0,clearTimeout(s),s=setTimeout(e,100)});for(let h=0;h<t.width/70;h++){let h=Math.round(Math.random()*(t.width-30)+30),s=Math.round(Math.random()*(t.height-10)+10),e=.1*Math.random()-.05,n=.1*Math.random()+.1,r=i(.2,.6),u=.001,c=a(),f=Math.round(30*Math.random()+20);d.push(new o(h,s,e,n,c,r,u,f))}!function i(){requestAnimationFrame(i),h.clearRect(0,0,t.width,t.height);for(let t=0;t<d.length;t++)d[t].update()}()};canvas1();</script> </body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="ie=edge"><style>body{margin:0}#hero_page{background-image:url(green_background.png);background-size:cover;background-attachment:fixed;height:100vh;width:100%}</style><title>Bubbles</title></head><body><div id="hero_page"> <canvas id="the_canvas" style="z-index: 4"></canvas></div>
+<script>
+const canvas1 = function() {
+const canvas = document.getElementById("the_canvas");
+const ctx = canvas.getContext("2d");
+
+// Make it visually fill the positioned parent
+canvas.style.width ='100%';
+canvas.style.height='100vh';
+// ...then set the internal size to match
+canvas.width  = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
+
+
+canvas.style.background = "";
+
+
+
+
+function getRandomRange(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function pickRanColor() {
+    const one = 1;
+    const two = 2;
+    const three = 3;
+    const four = 4;
+    
+    let answer = Math.round(Math.random() * (4 - 1) + 1);
+    
+    if (answer == one) {
+        return "#ffffe6";
+    } else if (answer == two) {
+        return "#ffffcc";
+    } else if (answer == three) {
+        return "#ffffb3";
+    } else if (answer == four) {
+        return "white";
+    }    
+}
+
+
+
+let circleArray = [];
+
+
+let Circle = function(x, y, dx, dy, color, opacity, dOpacity, radius) {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.color = color;
+    this.dOpacity = dOpacity;
+    this.opacity = opacity;
+    this.radius = radius;
+    
+    
+
+    
+    this.draw = function() {
+        ctx.globalAlpha = this.opacity;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 30;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+    
+    this.update = function() {
+        this.x += this.dx;
+        this.y += this.dy;
+        this.opacity += this.dOpacity;
+        
+        
+        if (this.x-(this.radius) > canvas.width) {
+            this.x = 0-this.radius;
+        }
+        if (this.x+(this.radius) < 0) {
+            this.x = canvas.width+this.radius;
+        }
+        if (this.y-this.radius > canvas.height) {
+            this.y = 0-this.radius;
+        }
+        if (this.opacity >= 0.6) {
+            this.dOpacity = -this.dOpacity;
+        }
+        
+        if (this.opacity <= 0.2) {
+            this.dOpacity = +0.001;
+        }
+//        if (this.opacity <= 0.2) {
+//            this.reverse = false;
+//            if (this.reverse == false ) {
+//                this.opacity += this.dOpacity;
+//            }
+//            
+//        }
+
+        this.draw();
+    }
+
+}
+
+//window.addEventListener('resize', function (){
+//    canvas.width  = canvas.offsetWidth;
+//    canvas.height = canvas.offsetHeight;
+//});
+let id;
+window.addEventListener('resize', function (){
+        circleArray.length = 0
+        clearTimeout(id);
+        id = setTimeout(redraw, 100);
+});
+
+
+
+function redraw(){
+        canvas.style.width ='100%';
+        canvas.style.height = '100vh';
+        canvas.width  = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        for (let i=0; i<canvas.width/70; i++) {
+
+        let x = Math.round(Math.random() * (canvas.width - 30) + 30);
+        let y = Math.round(Math.random() * (canvas.height - 10) + 10);
+        let dx = Math.random() * (0.05 - (-0.05)) - 0.05;
+        let dy = Math.random() * (0.2 - 0.1) + 0.1;
+        let opacity = getRandomRange(0.2, 0.6);
+        let dOpacity = 0.001;
+        let color = pickRanColor();
+        let radius = Math.round(Math.random() * (50 - 20) + 20);
+
+        circleArray.push(new Circle (x, y, dx, dy, color, opacity, dOpacity, radius));
+    } 
+}
+
+
+
+
+for (let i=0; i<canvas.width/70; i++) {
+    
+    let x = Math.round(Math.random() * (canvas.width - 30) + 30);
+    let y = Math.round(Math.random() * (canvas.height - 10) + 10);
+    let dx = Math.random() * (0.05 - (-0.05)) - 0.05;
+    let dy = Math.random() * (0.2 - 0.1) + 0.1;
+    let opacity = getRandomRange(0.2, 0.6);
+    let dOpacity = 0.001;
+    let color = pickRanColor();
+    let radius = Math.round(Math.random() * (50 - 20) + 20);
+    
+    circleArray.push(new Circle (x, y, dx, dy, color, opacity, dOpacity, radius));
+
+}
+
+
+
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    
+    for (let i = 0; i < circleArray.length; i++) {
+        circleArray[i].update();
+    }
+}animate()
+    
+}
+
+canvas1();
+</script></body></html>
 
